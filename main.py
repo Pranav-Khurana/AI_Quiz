@@ -38,7 +38,7 @@ if __name__ == "__main__":
     except:
         print("Unable to Generate **tasks_output** output")
 
-    with open("QuizOutput/data.json", "w") as json_file:
-        json.dump(output.raw, json_file, indent=4)
+    # with open("QuizOutput/data.json", "w") as json_file:
+    #     json.dump(output.raw, json_file, indent=4)
 
     print("AI QUIZ GENERATED")
