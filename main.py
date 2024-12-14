@@ -1,4 +1,5 @@
-import json
+import json, os
+from datetime import datetime
 from Quiz.quiz import QuizCrew
 from config import Config
 
@@ -11,22 +12,10 @@ if __name__ == "__main__":
     my_quiz = QuizCrew(Config.GEMINI_KEY)
     output = my_quiz.run(topic, question_count)
 
-    print("\n\nOUTPUT DETAILS:-")
+    os.makedirs("QuizOutput", exist_ok=True)
+    filename = f"QuizOutput/{topic.replace(' ','_')}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json"
 
-    try:
-        print(f"TOKEN USAGE:- \n  {output.token_usage}")
-    except:
-        print(
-            "Unable to Generate **token_usage** output",
-            end="-" * 10 + "start" + "-" * 10 + "\n",
-        )
+    with open(filename, "w") as json_file:
+        json.dump(output, json_file, indent=4)
 
-    for output in output.tasks_output:
-        print(
-            f"Agent: {output.agent} \n JSON: {output.json_dict}", end="-" * 30 + "\n\n"
-        )
-
-    # with open("QuizOutput/data.json", "w") as json_file:
-    #     json.dump(output.raw, json_file, indent=4)
-
-    print("AI QUIZ GENERATED")
+    print("AI QUIZ GENERATED AND FILE SAVED IN QUIZOUTPUT")

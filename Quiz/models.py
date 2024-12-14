@@ -1,5 +1,6 @@
-from typing import List
+from typing import List, Union
 from pydantic import BaseModel
+from crewai.types.usage_metrics import UsageMetrics
 
 
 class Points(BaseModel):
@@ -41,5 +42,5 @@ class MCQQuestions(BaseModel):
 
 class Article(BaseModel):
     information: Info
-    mcq: MCQQuestions
-    short_question: ShortQuestions
+    questions: List[Union[ShortQuestions, MCQQuestions]]
+    token_usage: UsageMetrics

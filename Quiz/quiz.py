@@ -1,4 +1,5 @@
 from crewai import Crew, LLM, Process
+from Quiz.models import Article
 from Quiz.agents import QuizAgents
 from Quiz.tasks import QuizTasks
 
@@ -33,4 +34,11 @@ class QuizCrew:
         )
 
         result = crew.kickoff()
-        return result
+
+        response = Article(
+            information=result.tasks_output[0].pydantic,
+            questions=[task.pydantic for task in result.tasks_output[1:]],
+            token_usage=result.token_usage,
+        )
+
+        return response.model_dump()

@@ -28,7 +28,7 @@ class QuizTasks:
                                             incorrect: List[str]
                                         }
                                    ]}""",
-            output_json=MCQQuestions,
+            output_pydantic=MCQQuestions,
             agent=agent,
         )
 
@@ -53,7 +53,7 @@ class QuizTasks:
                                         answer: str,
                                         ]
                                    }""",
-            output_json=ShortQuestions,
+            output_pydantic=ShortQuestions,
             agent=agent,
         )
 
@@ -73,7 +73,6 @@ class QuizTasks:
                                         }
                                     ]
                                    }""",
-            output_json=Info,
-            # output_pydantic=Info,
+            output_pydantic=Info,
             agent=agent,
         )
