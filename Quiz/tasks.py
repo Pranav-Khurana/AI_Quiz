@@ -1,10 +1,13 @@
-from crewai import Task
+from crewai import Task, Agent
 from textwrap import dedent
+from Quiz.models import Info, MCQQuestions, ShortQuestions, List
 
 
 class QuizTasks:
 
-    def mcq_questions(self, agent, topic, count, context):
+    def mcq_questions(
+        self, agent: Agent, topic: str, count: int, context: List[Task]
+    ) -> Task:
         return Task(
             context=context,
             description=dedent(
@@ -14,20 +17,24 @@ class QuizTasks:
             You also need to assign marks in the range [1,2,3] based on the level of difficulty.
             Make sure all the questions have 1 correct choice and 3 incorrect choices."""
             ),
-            expected_output="""You should return a json list of question dictionary in the following format:
-                                   {[ 
-                                   question_statement: question statement,
-                                   associated_marks: associated markers,
-                                   difficulty_level: difficulty level,
+            expected_output="""You should return a json object of question dictionary in the following format:
+                                   {
+                                   multiple_choice_questions: [ 
+                                   question_statement: str,
+                                   associated_marks: int,
+                                   difficulty_level: str,
                                    answers: {
-                                            correct: correct choice, 
-                                            incorrect: [incorrect choices]
+                                            correct: str, 
+                                            incorrect: List[str]
                                         }
                                    ]}""",
+            output_json=MCQQuestions,
             agent=agent,
         )
 
-    def short_questions(self, agent, topic, count, context):
+    def short_questions(
+        self, agent: Agent, topic: str, count: int, context: List[Task]
+    ) -> Task:
         return Task(
             context=context,
             description=dedent(
@@ -37,26 +44,36 @@ class QuizTasks:
             You also need to assign marks in the range [2,3,4] based on the level of difficulty.
             Make sure all the questions and answers are precise and in correct format."""
             ),
-            expected_output="""You should return a json list of question dictionary in the following format:
-                                   {[ 
-                                    question_statement: question statement,
-                                    associated_marks: associated marks,
-                                    difficulty_level: difficulty level,
-                                    answer: answer,
-                                   ]}""",
+            expected_output="""You should return a json object of question dictionary in the following format:
+                                   {
+                                    short_answer_questions : [ 
+                                        question_statement: str,
+                                        associated_marks: int,
+                                        difficulty_level: str,
+                                        answer: str,
+                                        ]
+                                   }""",
+            output_json=ShortQuestions,
             agent=agent,
         )
 
-    def gather_knowledge(self, agent, topic):
+    def gather_knowledge(self, agent: Agent, topic: str) -> Task:
         return Task(
             description=dedent(
                 f"""Gather all the knowledge available on {topic} and arange it in precise and concise points. 
                 Make sure the points provide every bit of information available about {topic}."""
             ),
-            expected_output="""You should return a json list of points in the following format:
+            expected_output="""You should return a json object in the following format:
                                    {
-                                    topic: ,
-                                    points:[]
+                                    topic: str,
+                                    points: [
+                                        {
+                                        heading: str,
+                                        content: List[str]
+                                        }
+                                    ]
                                    }""",
+            output_json=Info,
+            # output_pydantic=Info,
             agent=agent,
         )

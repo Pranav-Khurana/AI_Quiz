@@ -8,35 +8,23 @@ if __name__ == "__main__":
     question_count = int(
         input("Please provide the number of questions you want me to generate: ")
     )
-    my_quiz = QuizCrew(topic, question_count, Config.GEMINI_KEY)
-    output = my_quiz.run()
+    my_quiz = QuizCrew(Config.GEMINI_KEY)
+    output = my_quiz.run(topic, question_count)
 
     print("\n\nOUTPUT DETAILS:-")
 
     try:
-        print(f"RAW:- \n  {output.raw}")
-    except:
-        print("Unable to Generate **raw** output")
-
-    try:
-        print(f"JSON DICT:- \n  {output.json_dict}")
-    except:
-        print("Unable to Generate **json_dict** output")
-
-    try:
-        print(f"PYDANTIC:- \n  {output.pydantic}")
-    except:
-        print("Unable to Generate **pydantic** output")
-
-    try:
         print(f"TOKEN USAGE:- \n  {output.token_usage}")
     except:
-        print("Unable to Generate **token_usage** output")
+        print(
+            "Unable to Generate **token_usage** output",
+            end="-" * 10 + "start" + "-" * 10 + "\n",
+        )
 
-    try:
-        print(f"TASKS OUTPUT:- \n  {output.tasks_output}")
-    except:
-        print("Unable to Generate **tasks_output** output")
+    for output in output.tasks_output:
+        print(
+            f"Agent: {output.agent} \n JSON: {output.json_dict}", end="-" * 30 + "\n\n"
+        )
 
     # with open("QuizOutput/data.json", "w") as json_file:
     #     json.dump(output.raw, json_file, indent=4)

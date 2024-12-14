@@ -1,9 +1,9 @@
-from crewai import Agent
+from crewai import Agent, LLM
 
 
 class QuizAgents:
 
-    def examiner(self, topic, llm):
+    def examiner(self, topic: str, llm: LLM):
         return Agent(
             role=f"Examiner",
             goal=f"Gather insights about {topic}",
@@ -12,7 +12,7 @@ class QuizAgents:
             llm=llm,
         )
 
-    def teacher(self, topic, llm):
+    def teacher(self, topic: str, llm: LLM):
         return Agent(
             role=f"{topic} Expert",
             goal=f"Provide knowledge and insight on {topic}",
